@@ -19,7 +19,11 @@ public class Author extends Person{
         return "Author " + name;
     }
 
-    public void addBook (Book book) {
+    public String addBook (Book book) {
+        if (books.contains(book)){
+            return "Book already exist";
+        }
         books.add(book);
+        return "Book added successfully";
     }
 }
