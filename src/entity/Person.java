@@ -1,9 +1,9 @@
 package entity;
 
 public abstract class Person {
-    private Long id;
-    private String name;
-    private String email;
+    protected Long id;
+    protected String name;
+    protected String email;
 
     public Person(Long id, String name, String email) {
         this.id = id;
