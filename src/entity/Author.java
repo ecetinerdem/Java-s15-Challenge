@@ -18,4 +18,8 @@ public class Author extends Person{
     public String whoYouAre() {
         return "Author " + name;
     }
+
+    public void addBook (Book book) {
+        books.add(book);
+    }
 }
