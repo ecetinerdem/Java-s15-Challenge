@@ -18,7 +18,7 @@ public class Reader extends Person{
 
     @Override
     public String whoYouAre() {
-        return "Reader " + name;
+        return "Reader " + getName();
     }
 
     public String canBorrowMore() {
