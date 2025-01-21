@@ -15,7 +15,7 @@ public class Main {
 
     public static void main(String[] args) {
         while (true) {
-            displayMainMenu();
+            //displayMainMenu();
             int choice = InputHandler.getIntInput("Enter your choice: ");
 
             switch (choice) {
@@ -29,19 +29,19 @@ public class Main {
                     updateBook();
                     break;
                 case 4:
-                    deleteBook();
+                    //deleteBook();
                     break;
                 case 5:
-                    listBooksByCategory();
+                    //listBooksByCategory();
                     break;
                 case 6:
-                    listBooksByAuthor();
+                    //listBooksByAuthor();
                     break;
                 case 7:
-                    borrowBook();
+                    //borrowBook();
                     break;
                 case 8:
-                    returnBook();
+                    //returnBook();
                     break;
                 case 9:
                     System.out.println("Exiting...");
