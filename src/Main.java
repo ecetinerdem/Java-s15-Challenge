@@ -52,6 +52,7 @@ public class Main {
         }
     }
 
+
     private static String addBook() {
 
         System.out.println("\n=== Add New Book ===");
@@ -91,6 +92,13 @@ public class Main {
                 return bookByName.toString();
         }
         return ("Book does not exist");
+    }
+
+    private static void updateBook() {
+        System.out.println("\n=== Update Book ===");
+        Long bookId = InputHandler.getLongInput("Enter Book ID: ");
+        if (library.books.containsKey(bookId))
+        Book foundBook = library.findById(bookId);
     }
 
 }
