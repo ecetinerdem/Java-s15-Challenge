@@ -16,15 +16,39 @@ public class Reader extends Person{
         this.balance = 0.0;
     }
 
+    public List<Book> getBorrowedBooks() {
+        return borrowedBooks;
+    }
+
+    public void setBorrowedBooks(List<Book> borrowedBooks) {
+        this.borrowedBooks = borrowedBooks;
+    }
+
+    public Integer getBookBorrowLimit() {
+        return bookBorrowLimit;
+    }
+
+    public void setBookBorrowLimit(Integer bookBorrowLimit) {
+        this.bookBorrowLimit = bookBorrowLimit;
+    }
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
     @Override
     public String whoYouAre() {
         return "Reader " + getName();
     }
 
-    public String canBorrowMore() {
+    public Boolean canBorrowMore() {
         if (borrowedBooks.size() >= bookBorrowLimit) {
-            return "Sorry you cannot borrow anymore books until you return previously borrowed books";
+            return false;
         }
-        return "Book successfully borrowed";
+        return true;
     }
 }
