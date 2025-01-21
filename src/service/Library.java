@@ -36,7 +36,7 @@ public class Library {
         return books.get(bookId);
     }
 
-    public Book findBookByName( String name) {
+    public Book findBookByName(String name) {
         for (Map.Entry<Long, Book> entry : books.entrySet()) {
             if (entry.getValue().getName().equals(name)) {
                 return entry.getValue();
@@ -68,6 +68,10 @@ public class Library {
 
     public Reader findReaderById(Long bookId) {
         return readers.get(bookId);
+    }
+
+    public void addAuthor(Author author) {
+        authors.put(author.getId(), author);
     }
 
     public Author findAuthorById(Long authorId) {
