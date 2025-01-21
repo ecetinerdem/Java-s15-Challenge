@@ -85,20 +85,59 @@ public class Main {
             case 1:
                 Long bookId = InputHandler.getLongInput("Enter Book ID: ");
                 Book bookByID = library.findById(bookId);
-                return bookByID.toString();
+                if (bookByID != null) {
+                    return bookByID.toString();
+                } else {
+                    return "Book does not exist";
+                }
             case 2:
                 String name = InputHandler.getStringInput("Enter Book Name: ");
                 Book bookByName = library.findBookByName(name);
-                return bookByName.toString();
+                if (bookByName != null) {
+                    return bookByName.toString();
+                } else {
+                    return "Book does not exist";
+                }
         }
         return ("Book does not exist");
     }
 
-    private static void updateBook() {
+    private static String updateBook() {
         System.out.println("\n=== Update Book ===");
         Long bookId = InputHandler.getLongInput("Enter Book ID: ");
-        if (library.books.containsKey(bookId))
-        Book foundBook = library.findById(bookId);
+        if (!library.getBooks().containsKey(bookId)) {
+            return "Book does not exist";
+        }
+
+        // Retrieve the existing book
+        Book existingBook = library.getBooks().get(bookId);
+
+        // Get new values
+        String name = InputHandler.getStringInput("Enter Book Name (leave blank to keep current): ");
+        if (!name.isEmpty()) {
+            existingBook.setName(name);
+        }
+
+        Long authorId = InputHandler.getLongInput("Enter Author ID: ");
+        Author author = library.findAuthorById(authorId);
+        if (author == null) {
+            String authorName = InputHandler.getStringInput("Author not found. Enter Author Name: ");
+            String authorEmail = InputHandler.getStringInput("Enter Author Email: ");
+            author = new Author(authorId, authorName, authorEmail);
+            library.addAuthor(author);
+        }
+        existingBook.setAuthor(author);
+
+        Double price = InputHandler.getDoubleInput("Enter Book Price: ");
+        existingBook.setPrice(price);
+
+        Category category = InputHandler.getCategoryInput("Enter Category: ");
+        existingBook.setCategory(category);
+
+        Status status = InputHandler.getStatusInput("Enter Status: ");
+        existingBook.setStatus(status);
+
+        return "Book updated in library";
     }
 
 }
