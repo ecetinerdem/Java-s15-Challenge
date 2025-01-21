@@ -13,6 +13,16 @@ public class Book {
     private Category category;
 
 
+
+    public Book(Long id, String name, Author author, Double price, Category category, Status status) {
+        this.id = id;
+        this.name = name;
+        this.author = author;
+        this.price = price;
+        this.category = category;
+        this.status = status;
+    }
+
     public Book(Long id, String name, Author author, Double price, Status status, LocalDate purchaseDate, LocalDate returnDate, Category category) {
         this.id = id;
         this.name = name;
