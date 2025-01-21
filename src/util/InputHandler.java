@@ -1,5 +1,8 @@
 package util;
 
+import entity.Category;
+import entity.Status;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -58,6 +61,30 @@ public class InputHandler {
                 return LocalDate.parse(input, DATE_FORMATTER);
             } catch (DateTimeParseException e) {
                 System.out.println("Please enter a valid date in the format dd-MM-yyyy.");
+            }
+        }
+    }
+
+    public static Category getCategoryInput(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim().toUpperCase(); // Convert to uppercase for case-insensitive comparison
+            try {
+                return Category.valueOf(input); // Try to convert the input to a Category enum
+            } catch (IllegalArgumentException e) {
+                System.out.println("Please enter a valid category. Available categories: " + String.join(", ", Category.HORROR.toString(), Category.SCIFI.toString(), Category.FANTASY.toString(),Category.HISTORY.toString(),Category.LITERATURE.toString(),Category.ACTION.toString(),Category.NOVEL.toString(),Category.COMICS.toString(),Category.SCIENCE.toString(), Category.HOBBY.toString(), Category.LEARNING.toString()));
+            }
+        }
+    }
+
+    public static Status getStatusInput(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim().toUpperCase(); // Convert to uppercase for case-insensitive comparison
+            try {
+                return Status.valueOf(input); // Try to convert the input to a Category enum
+            } catch (IllegalArgumentException e) {
+                System.out.println("Please enter a valid status. Available statuses: " + String.join(", ", Status.AVAILABLE.toString(), Status.BORROWED.toString()));
             }
         }
     }
