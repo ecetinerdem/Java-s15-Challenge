@@ -11,6 +11,46 @@ public class Library {
     private Map<Category, List<Book>> categoryBooks;
     private Map<Book, Reader> borrowedBooks;
 
+    public Map<Long, Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(Map<Long, Book> books) {
+        this.books = books;
+    }
+
+    public Map<Long, Reader> getReaders() {
+        return readers;
+    }
+
+    public void setReaders(Map<Long, Reader> readers) {
+        this.readers = readers;
+    }
+
+    public Map<Long, Author> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(Map<Long, Author> authors) {
+        this.authors = authors;
+    }
+
+    public Map<Category, List<Book>> getCategoryBooks() {
+        return categoryBooks;
+    }
+
+    public void setCategoryBooks(Map<Category, List<Book>> categoryBooks) {
+        this.categoryBooks = categoryBooks;
+    }
+
+    public Map<Book, Reader> getBorrowedBooks() {
+        return borrowedBooks;
+    }
+
+    public void setBorrowedBooks(Map<Book, Reader> borrowedBooks) {
+        this.borrowedBooks = borrowedBooks;
+    }
+
     public Library() {
         this.books = new HashMap<>();
         this.readers = new HashMap<>();
