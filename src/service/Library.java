@@ -28,6 +28,10 @@ public class Library {
         books.remove(bookId);
     }
 
+    public void updateBook(Long bookId, Book updateBook) {
+        books.put(bookId, updateBook);
+    }
+
     public Book findById(Long bookId) {
         return books.get(bookId);
     }
