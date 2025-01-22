@@ -46,9 +46,6 @@ public class Reader extends Person{
     }
 
     public Boolean canBorrowMore() {
-        if (borrowedBooks.size() >= bookBorrowLimit) {
-            return false;
-        }
-        return true;
+        return borrowedBooks.size() < bookBorrowLimit;
     }
 }
