@@ -5,6 +5,15 @@ public abstract class Person {
     private String name;
     private String email;
 
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
+
     public Person(Long id, String name, String email) {
         this.id = id;
         this.name = name;

@@ -1,37 +1,36 @@
 package service;
 
 import entity.*;
-
 import java.util.*;
 
 public class Library {
-    private Map<Long, Book> books;
-    private Map<Long, Reader> readers;
-    private Map<Long, Author> authors;
+    private List<Book> books;
+    private List<Reader> readers;
+    private List<Author> authors;
     private Map<Category, List<Book>> categoryBooks;
     private Map<Book, Reader> borrowedBooks;
 
-    public Map<Long, Book> getBooks() {
+    public List<Book> getBooks() {
         return books;
     }
 
-    public void setBooks(Map<Long, Book> books) {
+    public void setBooks(List<Book> books) {
         this.books = books;
     }
 
-    public Map<Long, Reader> getReaders() {
+    public List<Reader> getReaders() {
         return readers;
     }
 
-    public void setReaders(Map<Long, Reader> readers) {
+    public void setReaders(List<Reader> readers) {
         this.readers = readers;
     }
 
-    public Map<Long, Author> getAuthors() {
+    public List<Author> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(Map<Long, Author> authors) {
+    public void setAuthors(List<Author> authors) {
         this.authors = authors;
     }
 
@@ -52,80 +51,107 @@ public class Library {
     }
 
     public Library() {
-        this.books = new HashMap<>();
-        this.readers = new HashMap<>();
-        this.authors = new HashMap<>();
+        this.books = new ArrayList<>();
+        this.readers = new ArrayList<>();
+        this.authors = new ArrayList<>();
         this.categoryBooks = new HashMap<>();
         this.borrowedBooks = new HashMap<>();
     }
 
     public void addBook(Book book) {
-        books.put(book.getId(), book);
-        categoryBooks.computeIfAbsent(book.getCategory(), c -> new ArrayList<>()).add(book);
+        books.add(book);
+        categoryBooks
+                .computeIfAbsent(book.getCategory(), c -> new ArrayList<>())
+                .add(book);
+        book.getAuthor().getBooks().add(book);
     }
 
     public void removeBook(Long bookId) {
-        books.remove(bookId);
+        Book bookToRemove = findById(bookId);
+        if (bookToRemove != null) {
+            books.remove(bookToRemove);
+            categoryBooks.get(bookToRemove.getCategory()).remove(bookToRemove);
+            bookToRemove.getAuthor().getBooks().remove(bookToRemove);
+            borrowedBooks.remove(bookToRemove);
+        }
     }
 
     public void updateBook(Long bookId, Book updateBook) {
-        books.put(bookId, updateBook);
+        Book existingBook = findById(bookId);
+        if (existingBook != null) {
+            // Remove from old category
+            categoryBooks.get(existingBook.getCategory()).remove(existingBook);
+
+            // Update the book
+            int index = books.indexOf(existingBook);
+            books.set(index, updateBook);
+
+            // Add to new category
+            categoryBooks
+                    .computeIfAbsent(updateBook.getCategory(), c -> new ArrayList<>())
+                    .add(updateBook);
+        }
     }
 
     public Book findById(Long bookId) {
-        return books.get(bookId);
+        return books.stream()
+                .filter(book -> book.getId().equals(bookId))
+                .findFirst()
+                .orElse(null);
     }
 
     public Book findBookByName(String name) {
-        for (Map.Entry<Long, Book> entry : books.entrySet()) {
-            if (entry.getValue().getName().equals(name)) {
-                return entry.getValue();
-            }
-        }
-        return null;
+        return books.stream()
+                .filter(book -> book.getName().equals(name))
+                .findFirst()
+                .orElse(null);
     }
 
     public List<Book> findBooksByCategory(Category category) {
         return categoryBooks.getOrDefault(category, new ArrayList<>());
     }
 
-
-    public List<Book> findBooksByAuthor(Long authorId) {
-        Author author = authors.get(authorId);
-        if (author == null) {
-            return  new ArrayList<>();
-        }
-        return new ArrayList<>(author.getBooks());
+    public Set<Book> findBooksByAuthor(Long authorId) {
+        Author author = findAuthorById(authorId);
+        return author != null ? author.getBooks() : new HashSet<>();
     }
 
     public List<Book> findBooksByReader(Long readerId) {
-        Reader reader = readers.get(readerId);
-        if (reader == null) {
-            return new ArrayList<>();
-        }
-        return new ArrayList<>(reader.getBorrowedBooks());
+        Reader reader = findReaderById(readerId);
+        return reader != null ? reader.getBorrowedBooks() : new ArrayList<>();
     }
 
-    public Reader findReaderById(Long bookId) {
-        return readers.get(bookId);
+    public Reader findReaderById(Long readerId) {
+        return readers.stream()
+                .filter(reader -> reader.getId().equals(readerId))
+                .findFirst()
+                .orElse(null);
     }
 
     public void addAuthor(Author author) {
-        authors.put(author.getId(), author);
+        if (!authors.contains(author)) {
+            authors.add(author);
+        }
     }
 
     public Author findAuthorById(Long authorId) {
-        return authors.get(authorId);
+        return authors.stream()
+                .filter(author -> author.getId().equals(authorId))
+                .findFirst()
+                .orElse(null);
     }
 
-
     public Boolean borrowBook(Long bookId, Long readerId) {
-        Book book = books.get(bookId);
-        Reader reader = readers.get(readerId);
+        Book book = findById(bookId);
+        Reader reader = findReaderById(readerId);
 
-        if (book != null && reader != null && book.getStatus().equals(Status.AVAILABLE) && reader.canBorrowMore()) {
+        if (book != null && reader != null &&
+                book.getStatus().equals(Status.AVAILABLE) &&
+                reader.canBorrowMore()) {
+
             book.setStatus(Status.BORROWED);
             reader.getBorrowedBooks().add(book);
+            borrowedBooks.put(book, reader);
             generateBill(book, reader);
             return true;
         }
@@ -138,10 +164,13 @@ public class Library {
     }
 
     public boolean returnBook(Long bookId, Long readerId) {
-        Book book = books.get(bookId);
-        Reader reader = readers.get(readerId);
+        Book book = findById(bookId);
+        Reader reader = findReaderById(readerId);
 
-        if (book != null && reader != null && borrowedBooks.get(book) == reader) {
+        if (book != null && reader != null &&
+                borrowedBooks.get(book) == reader &&
+                book.getStatus().equals(Status.BORROWED)) {
+
             book.setStatus(Status.AVAILABLE);
             reader.getBorrowedBooks().remove(book);
             borrowedBooks.remove(book);
@@ -155,5 +184,4 @@ public class Library {
         Double rent = book.getPrice() * 0.1;
         reader.setBalance(reader.getBalance() + rent);
     }
-
 }

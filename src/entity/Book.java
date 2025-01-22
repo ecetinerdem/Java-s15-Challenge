@@ -12,7 +12,17 @@ public class Book {
     private LocalDate returnDate;
     private Category category;
 
-
+    @Override
+    public String toString() {
+        return "Book{" +
+                "name='" + name + '\'' +
+                ", author=" + author +
+                ", category=" + category +
+                ", status=" + status +
+                ", price=" + price +
+                ", id=" + id +
+                '}';
+    }
 
     public Book(Long id, String name, Author author, Double price, Category category, Status status) {
         this.id = id;
