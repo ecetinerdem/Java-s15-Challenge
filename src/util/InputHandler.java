@@ -9,7 +9,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class InputHandler {
-    private static Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     // Method to get String input
@@ -68,9 +68,9 @@ public class InputHandler {
     public static Category getCategoryInput(String prompt) {
         while (true) {
             System.out.print(prompt);
-            String input = scanner.nextLine().trim().toUpperCase(); // Convert to uppercase for case-insensitive comparison
+            String input = scanner.nextLine().trim().toUpperCase();
             try {
-                return Category.valueOf(input); // Try to convert the input to a Category enum
+                return Category.valueOf(input);
             } catch (IllegalArgumentException e) {
                 System.out.println("Please enter a valid category. Available categories: " + String.join(", ", Category.HORROR.toString(), Category.SCIFI.toString(), Category.FANTASY.toString(),Category.HISTORY.toString(),Category.LITERATURE.toString(),Category.ACTION.toString(),Category.NOVEL.toString(),Category.COMICS.toString(),Category.SCIENCE.toString(), Category.HOBBY.toString(), Category.LEARNING.toString()));
             }
@@ -80,9 +80,9 @@ public class InputHandler {
     public static Status getStatusInput(String prompt) {
         while (true) {
             System.out.print(prompt);
-            String input = scanner.nextLine().trim().toUpperCase(); // Convert to uppercase for case-insensitive comparison
+            String input = scanner.nextLine().trim().toUpperCase();
             try {
-                return Status.valueOf(input); // Try to convert the input to a Category enum
+                return Status.valueOf(input);
             } catch (IllegalArgumentException e) {
                 System.out.println("Please enter a valid status. Available statuses: " + String.join(", ", Status.AVAILABLE.toString(), Status.BORROWED.toString()));
             }
