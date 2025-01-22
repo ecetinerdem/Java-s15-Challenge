@@ -79,14 +79,14 @@ public class Library {
     public void updateBook(Long bookId, Book updateBook) {
         Book existingBook = findById(bookId);
         if (existingBook != null) {
-            // Remove from old category
+
             categoryBooks.get(existingBook.getCategory()).remove(existingBook);
 
-            // Update the book
+
             int index = books.indexOf(existingBook);
             books.set(index, updateBook);
 
-            // Add to new category
+
             categoryBooks
                     .computeIfAbsent(updateBook.getCategory(), c -> new ArrayList<>())
                     .add(updateBook);
